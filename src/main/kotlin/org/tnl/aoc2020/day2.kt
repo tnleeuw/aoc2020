@@ -6,7 +6,7 @@ import kotlin.streams.asSequence
 object Day2Puzzle1 {
     @JvmStatic
     fun main(args: Array<String>) {
-        val result = countValidEntries("d2p1-data.txt", PwdDbEntry::puzzle1Policy)
+        val result = countValidEntries("day2-data.txt", PwdDbEntry::puzzle1Policy)
         println("Total valid passwords: $result")
     }
 
@@ -15,7 +15,7 @@ object Day2Puzzle1 {
 object Day2Puzzle2 {
     @JvmStatic
     fun main(args: Array<String>) {
-        val result = countValidEntries("d2p1-data.txt", PwdDbEntry::puzzle2Policy)
+        val result = countValidEntries("day2-data.txt", PwdDbEntry::puzzle2Policy)
         println("Total valid passwords: $result")
     }
 

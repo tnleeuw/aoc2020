@@ -9,7 +9,7 @@ internal class Day1Puzzle1Test {
     @Test
     fun calculateResultFromInputFile() {
         // Act
-        val result = Day1Puzzle1.calculateResultFromInputFile("d1p1-test.txt")
+        val result = Day1Puzzle1.calculateResultFromInputFile("day1-test.txt")
 
         // Assert
         assertEquals(514579L, result)
@@ -47,7 +47,7 @@ internal class Day1Puzzle2Test {
     @Test
     fun calculateResultFromInputFile() {
         // Act
-        val result = Day1Puzzle2.calculateResultFromInputFile("d1p1-test.txt")
+        val result = Day1Puzzle2.calculateResultFromInputFile("day1-test.txt")
 
         // Assert
         assertEquals(241861950L, result)

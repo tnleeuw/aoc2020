@@ -14,7 +14,7 @@ internal class MapGridTest {
     @Test
     internal fun testParseGridLines() {
         // Act
-        val map = readMap("d3p1-test.txt")
+        val map = readMap("day3-test.txt")
 
         // Assert
         assertEquals(11, map.height)
@@ -29,7 +29,7 @@ internal class MapGridTest {
     )
     internal fun testPositionChecks(line: Int, pos: Int, expected: Boolean) {
         // Arrange
-        val map = readMap("d3p1-test.txt")
+        val map = readMap("day3-test.txt")
 
         // Act / Assert
         assertEquals(expected, map.positionHasTree(line, pos))
@@ -43,7 +43,7 @@ internal class MapGridTest {
     )
     internal fun testIsOnMap(line: Int, expected: Boolean) {
         // Arrange
-        val map = readMap("d3p1-test.txt")
+        val map = readMap("day3-test.txt")
 
         // Act / Assert
         assertEquals(expected, map.isLineOnMap(line))
@@ -85,7 +85,7 @@ internal class CountTreesTest {
     @Test
     internal fun testCountTreesDefault() {
         // Arrange
-        val map = readMap("d3p1-test.txt")
+        val map = readMap("day3-test.txt")
 
         // Act
         val count = countTreesInPath(map)
@@ -104,7 +104,7 @@ internal class CountTreesTest {
     )
     internal fun testCountTrees(stepDown: Int, stepRight: Int, expected: Int) {
         // Arrange
-        val map = readMap("d3p1-test.txt")
+        val map = readMap("day3-test.txt")
 
         // Act
         val count = countTreesInPath(map, stepDown = stepDown, stepRight = stepRight)
@@ -116,7 +116,7 @@ internal class CountTreesTest {
     @Test
     internal fun testMultiplySlopes() {
         // Act
-        val result = multiplyTreesForAllSlopes("d3p1-test.txt")
+        val result = multiplyTreesForAllSlopes("day3-test.txt")
 
         // Assert
         assertEquals(336L, result)

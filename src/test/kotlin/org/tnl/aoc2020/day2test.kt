@@ -8,7 +8,7 @@ internal class Day2Puzzle1Test {
     @Test
     internal fun testCountValidEntriesPuzzle1() {
         // Act
-        val result = countValidEntries("d2p1-test.txt", PwdDbEntry::puzzle1Policy)
+        val result = countValidEntries("day2-test.txt", PwdDbEntry::puzzle1Policy)
 
         // Assert
         assertEquals(2, result)
@@ -17,7 +17,7 @@ internal class Day2Puzzle1Test {
     @Test
     internal fun testCountValidEntriesPuzzle2() {
         // Act
-        val result = countValidEntries("d2p1-test.txt", PwdDbEntry::puzzle2Policy)
+        val result = countValidEntries("day2-test.txt", PwdDbEntry::puzzle2Policy)
 
         // Assert
         assertEquals(1, result)

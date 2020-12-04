@@ -7,7 +7,7 @@ import org.tnl.aoc2020.getStringsFromStream
 object Day3Puzzle1 {
     @JvmStatic
     fun main(args: Array<String>) {
-        val result = countTreesInPath("d3p1-data.txt")
+        val result = countTreesInPath("day3-data.txt")
         println("Number of trees hit: $result")
     }
 
@@ -16,7 +16,7 @@ object Day3Puzzle1 {
 object Day3Puzzle2 {
     @JvmStatic
     fun main(args: Array<String>) {
-        val result = multiplyTreesForAllSlopes("d3p1-data.txt")
+        val result = multiplyTreesForAllSlopes("day3-data.txt")
         println("Tree-collision product for all tested slopes: $result")
         println("Int.MAX_VALUE: ${Int.MAX_VALUE}, result is larger? ${result > Int.MAX_VALUE.toLong()}")
     }

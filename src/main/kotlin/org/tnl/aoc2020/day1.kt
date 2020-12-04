@@ -7,7 +7,7 @@ object Day1Puzzle1 {
 
     @JvmStatic
     fun main(args: Array<String>) {
-        System.out.println("Product is: " + calculateResultFromInputFile("d1p1-data.txt"))
+        System.out.println("Product is: " + calculateResultFromInputFile("day1-data.txt"))
     }
 
     fun calculateResultFromInputFile(resourceName: String): Long {
@@ -33,7 +33,7 @@ object Day1Puzzle2 {
 
     @JvmStatic
     fun main(args: Array<String>) {
-        System.out.println("Product is: " + calculateResultFromInputFile("d1p1-data.txt"))
+        System.out.println("Product is: " + calculateResultFromInputFile("day1-data.txt"))
     }
 
     fun calculateResultFromInputFile(resourceName: String): Long {
