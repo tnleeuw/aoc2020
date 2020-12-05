@@ -29,14 +29,9 @@ fun findMySeat(fileName: String) = findGappedSeatId(
  * sentinel or the max value in the list.
  */
 fun findGappedSeatId(seatIds: Sequence<Int>): Int =
-    seatIds.sorted().fold(0) { prev, curr ->
-        if (curr - prev == 2) {
-            return curr - 1
-        } else {
-            curr
-        }
-    }
-
+    seatIds.sorted().windowed(2).find {
+        it[1] - it[0] == 2
+    }?.let { it[0] + 1 } ?: throw IllegalArgumentException("No missing seats")
 
 fun fileToLines(fileName: String): Sequence<String> =
     getDataInputStream(fileName).bufferedReader().lineSequence()
