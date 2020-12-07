@@ -15,6 +15,20 @@ object Day7Puzzle1 {
         return result.size
     }
 }
+
+object Day7Puzzle2 {
+    @JvmStatic
+    fun main(args: Array<String>) {
+        val nrOfBags = countBagsContainedIn("day7-data.txt", "shiny gold")
+        println("Your shiny gold bag contains a total of $nrOfBags other bags")
+    }
+
+    fun countBagsContainedIn(fileName: String, forColour: String): Int {
+        val rules = parseAllRules(fileToLines(fileName))
+        return countBagsContainedIn(forColour, rules)
+    }
+}
+
 class BagRule(val bagColour: String, val containRules: List<ContainRule> = listOf())
 
 class ContainRule(val bagColour: String, val quantity: Int)
@@ -54,3 +68,8 @@ fun findAllPossibleOuterBagsFor(bagColour: String, reverseMap: Map<String, List<
         .map { findAllPossibleOuterBagsFor(it, reverseMap) }
         .flatten())
 }
+
+fun countBagsContainedIn(bagColour: String, rules: Map<String, BagRule>): Int =
+    rules[bagColour]?.containRules?.map { containRule ->
+        containRule.quantity + containRule.quantity * countBagsContainedIn(containRule.bagColour, rules)
+    }?.sum() ?: 0

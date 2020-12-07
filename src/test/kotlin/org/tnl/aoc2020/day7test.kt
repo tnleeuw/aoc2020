@@ -77,12 +77,12 @@ internal class ParsingTest {
 
     @ParameterizedTest
     @CsvSource(
-        "day7-test.txt,9",
+        "day7p1-test.txt,9",
         "day7-data.txt,594"
     )
     internal fun testParseRules() {
         // Act
-        val rules = parseAllRules(fileToLines("day7-test.txt"))
+        val rules = parseAllRules(fileToLines("day7p1-test.txt"))
 
         // Assert
         assertEquals(9, rules.size)
@@ -91,7 +91,7 @@ internal class ParsingTest {
     @Test
     internal fun testReverseRuleMap() {
         // Arrange
-        val rules = parseAllRules(fileToLines("day7-test.txt"))
+        val rules = parseAllRules(fileToLines("day7p1-test.txt"))
 
         // Act
         val reverseMap = reverseRuleMap(rules)
@@ -109,7 +109,7 @@ internal class ParsingTest {
     @Test
     internal fun testFindPossibleOuterBags() {
         // Arrange
-        val rules = parseAllRules(fileToLines("day7-test.txt"))
+        val rules = parseAllRules(fileToLines("day7p1-test.txt"))
         val reverseMap = reverseRuleMap(rules)
 
         // Act
@@ -127,9 +127,38 @@ internal class ParsingTest {
     @Test
     internal fun testFindNrOfPossibleOuterBags() {
         // Act
-        val result = Day7Puzzle1.findNrOfBagColours("day7-test.txt", "shiny gold")
+        val result = Day7Puzzle1.findNrOfBagColours("day7p1-test.txt", "shiny gold")
 
         // Assert
         assertEquals(4, result)
+    }
+
+    @ParameterizedTest
+    @CsvSource(
+        "day7p1-test.txt,32",
+        "day7p2-test.txt,126",
+    )
+    internal fun testCountContainedBags(fileName: String, expected: Int) {
+        // Arrange
+        val rules = parseAllRules(fileToLines(fileName))
+
+        // Act
+        val result = countBagsContainedIn("shiny gold", rules)
+
+        // Assert
+        assertEquals(expected, result)
+    }
+
+    @ParameterizedTest
+    @CsvSource(
+        "day7p1-test.txt,32",
+        "day7p2-test.txt,126",
+    )
+    internal fun testCountContainedBags2(fileName: String, expected: Int) {
+        // Act
+        val result = Day7Puzzle2.countBagsContainedIn(fileName, "shiny gold")
+
+        // Assert
+        assertEquals(expected, result)
     }
 }
