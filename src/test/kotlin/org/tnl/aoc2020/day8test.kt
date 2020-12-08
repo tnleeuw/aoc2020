@@ -56,4 +56,16 @@ internal class Day8Test {
         // Assert
         assertEquals(5, result)
     }
+
+    @Test
+    internal fun testRunAndHotfixProgram() {
+        // Arrange
+        val program = readProgram("day8-test.txt")
+
+        // Act
+        val result = runProgramWithHotfix(program)
+
+        // Assert
+        assertEquals(8, result)
+    }
 }
