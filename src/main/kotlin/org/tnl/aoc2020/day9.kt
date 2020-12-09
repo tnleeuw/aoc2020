@@ -9,6 +9,15 @@ object Day9Puzzle1 {
     }
 }
 
+object Day9Puzzle2 {
+
+    @JvmStatic
+    fun main(args: Array<String>) {
+        val result = findEncryptionWeaknessInFile("day9-data.txt", 25)
+        println("Found the number: $result")
+    }
+}
+
 fun scanInvalidNumberInFile(fileName: String, lookbackSize: Int): Long =
     scanInvalidNumber(getNumbersFromStream(getDataInputStream(fileName)), lookbackSize)
 
@@ -31,4 +40,21 @@ fun hasTargetSum(lookbackWindow: List<Long>, targetSum: Long): Boolean {
     } catch (e: IllegalArgumentException) {
         return false
     }
+}
+
+fun findEncryptionWeaknessInFile(fileName: String, lookbackSize: Int): Long =
+    findEncryptionWeakness(getNumbersFromStream(getDataInputStream(fileName)), lookbackSize)
+
+fun findEncryptionWeakness(numbers: List<Long>, lookbackSize: Int): Long {
+    val targetSum = scanInvalidNumber(numbers, lookbackSize)
+    val range = findRangeThatSumsTo(numbers, targetSum)
+    return range.minOrNull()!! + range.maxOrNull()!!
+}
+
+fun findRangeThatSumsTo(numbers: List<Long>, targetSum: Long): List<Long> {
+    for (windowSize in 2..numbers.size-1) {
+        val r = numbers.windowed(windowSize).find { it.sum() == targetSum }
+        if (r != null) return r
+    }
+    throw IllegalArgumentException("Cannot find matching range")
 }
