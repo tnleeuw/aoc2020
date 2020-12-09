@@ -18,7 +18,7 @@ internal class Day1Puzzle1Test {
     @Test
     fun findPair1() {
         // Arrange
-        val testData = listOf(1721, 979, 366, 299, 675, 1456)
+        val testData = listOf<Long>(1721, 979, 366, 299, 675, 1456)
 
         // Act
         val result = Day1Puzzle1.findPair(testData)
@@ -31,7 +31,7 @@ internal class Day1Puzzle1Test {
     @Test
     fun findPair2() {
         // Arrange
-        val testData = listOf(979, 366, 299, 675, 1456, 1721)
+        val testData = listOf<Long>(979, 366, 299, 675, 1456, 1721)
 
         // Act
         val result = Day1Puzzle1.findPair(testData)
@@ -56,7 +56,7 @@ internal class Day1Puzzle2Test {
     @Test
     fun findTriplet1() {
         // Arrange
-        val testData = listOf(1721, 979, 366, 299, 675, 1456)
+        val testData = listOf<Long>(1721, 979, 366, 299, 675, 1456)
 
         // Act
         val result = Day1Puzzle2.findTriplet(testData)
@@ -70,7 +70,7 @@ internal class Day1Puzzle2Test {
     @Test
     fun findTriplet2() {
         // Arrange
-        val testData = listOf(366, 299, 675, 1456, 979, 1721)
+        val testData = listOf<Long>(366, 299, 675, 1456, 979, 1721)
 
         // Act
         val result = Day1Puzzle2.findTriplet(testData)

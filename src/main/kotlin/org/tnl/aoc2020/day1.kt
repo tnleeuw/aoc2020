@@ -15,7 +15,7 @@ object Day1Puzzle1 {
         return n1.toLong() * n2.toLong()
     }
 
-    fun findPair(numbers: List<Int>, targetSum: Int = 2020): Pair<Int, Int> {
+    fun findPair(numbers: List<Long>, targetSum: Long = 2020): Pair<Long, Long> {
 
         numbers.forEachIndexed { index, candidate1 ->
             numbers.subList(index+1, numbers.size).forEach { candidate2 ->
@@ -41,7 +41,7 @@ object Day1Puzzle2 {
         return n1.toLong() * n2.toLong() * n3.toLong()
     }
 
-    fun findTriplet(numbers: List<Int>, targetSum: Int = 2020): Triple<Int, Int, Int> {
+    fun findTriplet(numbers: List<Long>, targetSum: Long = 2020): Triple<Long, Long, Long> {
 
         numbers.forEachIndexed { index1, candidate1 ->
             numbers.subList(index1 + 1, numbers.size).forEachIndexed { index2, candidate2 ->
@@ -57,8 +57,8 @@ object Day1Puzzle2 {
     }
 }
 
-fun getNumbersFromStream(stream: InputStream): List<Int> {
-    return stream.bufferedReader().lines().map { v -> v.toInt() }.collect(Collectors.toList())
+fun getNumbersFromStream(stream: InputStream): List<Long> {
+    return stream.bufferedReader().lines().map { v -> v.toLong() }.collect(Collectors.toList())
 }
 
 fun getDataInputStream(resourceName: String): InputStream {
