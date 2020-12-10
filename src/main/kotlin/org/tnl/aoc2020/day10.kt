@@ -1,5 +1,8 @@
 package org.tnl.aoc2020
 
+import java.lang.IllegalArgumentException
+import kotlin.math.pow
+
 typealias Joltage=Long
 
 /**
@@ -48,6 +51,17 @@ object Day10Puzzle1 {
     fun calculateAnswer(fileName: String): Int =
         calculateDifferenceDistribution(calculateDifferences(readAllJoltages(fileName)))
 }
+
+object Day10Puzzle2 {
+
+    @JvmStatic
+    fun main(args: Array<String>) {
+        val answer = calculatePossibleCombinationsFromFile("day10-data.txt")
+        println("The answer is: $answer")
+    }
+
+}
+
 fun readAllJoltages(fileName: String): List<Joltage> =
     buildJoltageList(readAdapterJoltages(fileName))
 
@@ -65,3 +79,39 @@ fun calculateDifferences(adapters: List<Joltage>): List<Long> =
 
 fun calculateDifferenceDistribution(differences: List<Joltage>): Int =
     differences.filter { it == 1L }.count() * differences.filter { it == 3L }.count()
+
+fun calculateConsecutive1JoltageDifferences(differences: List<Long>): Int =
+    differences.windowed(2).filter { it.all { diff -> diff == 1L } }.count()
+
+fun findConsecutiveRangesOf1s(differences: List<Long>): List<Int> =
+    sequence<Int> {
+        val last = differences.fold(0) { acc, l ->
+            if (l == 1L) acc + 1
+            else {
+                yield(acc)
+                0
+            }
+        }
+        yield(last)
+    }.filter { it > 0 }.toList()
+
+fun groupRanges(rangeLengths: List<Int>): Map<Int, Int> =
+    rangeLengths.groupBy(keySelector = {it}, valueTransform = {it})
+        .mapValues { it.value.size }
+
+fun calculateTotalPossibleCombinations(countedRanges: Map<Int, Int>): Long =
+    countedRanges.map { (rangeLength, count) ->
+        when(rangeLength) {
+            1 -> 1L
+            2 -> 2L
+            3 -> 4L
+            4 -> 7L
+            else -> throw IllegalArgumentException("Don't know number of combinations for range length $rangeLength")
+        }.toDouble().pow(count).toLong()
+    }.reduce{acc, value -> acc * value}
+
+fun calculatePossibleCombinationsFromFile(fileName: String): Long =
+    calculateTotalPossibleCombinations(groupRanges(
+        findConsecutiveRangesOf1s(calculateDifferences(readAllJoltages(fileName)))
+    ))
+

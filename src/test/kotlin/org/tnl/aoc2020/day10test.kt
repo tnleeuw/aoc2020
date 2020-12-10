@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.CsvSource
 import kotlin.test.assertEquals
+import kotlin.test.assertTrue
 
 class Day10Test {
 
@@ -57,7 +58,7 @@ class Day10Test {
         val result = calculateDifferences(adapters)
 
         // Assert
-        assertEquals(listOf<Joltage>(1, 3, 1, 3), result)
+        assertEquals(listOf<Long>(1, 3, 1, 3), result)
     }
 
     @ParameterizedTest
@@ -85,6 +86,124 @@ class Day10Test {
     fun testPuzzle1Answer(fileName: String, expected: Int) {
         // Act
         val result = Day10Puzzle1.calculateAnswer(fileName)
+
+        // Assert
+        assertEquals(expected, result)
+    }
+
+    @Test
+    fun testConsecutive1JoltageDifferences() {
+        // Arrange
+        val joltages = readAllJoltages("day10-test1.txt")
+        val differences = calculateDifferences(joltages)
+
+        println("Differences: $differences")
+        // Act
+        val result = calculateConsecutive1JoltageDifferences(differences)
+
+        // Assert
+        assertEquals(3, result)
+
+    }
+
+    @Test
+    fun testConsecutive1JoltageDifferencesInBigFile() {
+        // Arrange
+        val joltages = readAllJoltages("day10-test2.txt")
+        val differences = calculateDifferences(joltages)
+
+        println("Differences: $differences")
+        // Act
+        val result = calculateConsecutive1JoltageDifferences(differences)
+
+        // Assert
+        assertEquals(15, result)
+
+    }
+
+    @ParameterizedTest
+    @CsvSource(
+        "day10-test1.txt|1,3,2,1",
+        "day10-test2.txt|4,4,3,2,4,1,4",
+//        "day10-data.txt|0",
+        delimiter = '|'
+    )
+    fun testFindConsecutive1Ranges(fileName: String, expectedStr: String) {
+        // Arrange
+        val joltages = readAllJoltages(fileName)
+        val differences = calculateDifferences(joltages)
+
+        println("Differences: $differences")
+
+        val expected = expectedStr.split(",")
+            .map { it.toInt() }
+
+        // Act
+        val result = findConsecutiveRangesOf1s(differences)
+        println("Result: $result")
+
+        // Assert
+        assertEquals(expected, result)
+    }
+
+    @Test
+    fun testGroupRanges() {
+        // Arrange
+        val joltages = readAllJoltages("day10-test2.txt")
+        val differences = calculateDifferences(joltages)
+        val ranges = findConsecutiveRangesOf1s(differences)
+
+        println("Differences: $differences")
+        println("Ranges: $ranges")
+        // Act
+        val result = groupRanges(ranges)
+        println("Map of groupped ranges: $result")
+
+        assertTrue(result.containsKey(4))
+        assertEquals(4, result[4])
+        assertTrue(result.containsKey(3))
+        assertEquals(1, result[3])
+        assertTrue(result.containsKey(2))
+        assertEquals(1, result[2])
+    }
+
+
+    @ParameterizedTest
+    @CsvSource(
+        "day10-test1.txt|8",
+        "day10-test2.txt|19208",
+//        "day10-data.txt|0",
+        delimiter = '|'
+    )
+    fun testCalculateTotalCombinations(fileName: String, expected: Long) {
+        // Arrange
+        val joltages = readAllJoltages(fileName)
+        val differences = calculateDifferences(joltages)
+        val ranges = findConsecutiveRangesOf1s(differences)
+        val groupedRanges = groupRanges(ranges)
+
+        println("Differences: $differences")
+        println("Ranges: $ranges")
+
+        // Act
+        val result = calculateTotalPossibleCombinations(groupedRanges)
+        println("Result: $result")
+
+        // Assert
+        assertEquals(expected, result)
+    }
+
+
+    @ParameterizedTest
+    @CsvSource(
+        "day10-test1.txt|8",
+        "day10-test2.txt|19208",
+//        "day10-data.txt|0",
+        delimiter = '|'
+    )
+    fun testCalculateTotalCombinationsFromFile(fileName: String, expected: Long) {
+        // Act
+        val result = calculatePossibleCombinationsFromFile(fileName)
 
         // Assert
         assertEquals(expected, result)
