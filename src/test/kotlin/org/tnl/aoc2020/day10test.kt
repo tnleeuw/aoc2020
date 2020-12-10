@@ -91,36 +91,6 @@ class Day10Test {
         assertEquals(expected, result)
     }
 
-    @Test
-    fun testConsecutive1JoltageDifferences() {
-        // Arrange
-        val joltages = readAllJoltages("day10-test1.txt")
-        val differences = calculateDifferences(joltages)
-
-        println("Differences: $differences")
-        // Act
-        val result = calculateConsecutive1JoltageDifferences(differences)
-
-        // Assert
-        assertEquals(3, result)
-
-    }
-
-    @Test
-    fun testConsecutive1JoltageDifferencesInBigFile() {
-        // Arrange
-        val joltages = readAllJoltages("day10-test2.txt")
-        val differences = calculateDifferences(joltages)
-
-        println("Differences: $differences")
-        // Act
-        val result = calculateConsecutive1JoltageDifferences(differences)
-
-        // Assert
-        assertEquals(15, result)
-
-    }
-
     @ParameterizedTest
     @CsvSource(
         "day10-test1.txt|1,3,2,1",

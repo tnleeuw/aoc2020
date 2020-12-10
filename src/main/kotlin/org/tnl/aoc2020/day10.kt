@@ -1,7 +1,6 @@
 package org.tnl.aoc2020
 
 import java.lang.IllegalArgumentException
-import kotlin.math.pow
 
 typealias Joltage=Long
 
@@ -80,20 +79,17 @@ fun calculateDifferences(adapters: List<Joltage>): List<Long> =
 fun calculateDifferenceDistribution(differences: List<Joltage>): Int =
     differences.filter { it == 1L }.count() * differences.filter { it == 3L }.count()
 
-fun calculateConsecutive1JoltageDifferences(differences: List<Long>): Int =
-    differences.windowed(2).filter { it.all { diff -> diff == 1L } }.count()
-
 fun findConsecutiveRangesOf1s(differences: List<Long>): List<Int> =
-    sequence<Int> {
+    sequence {
         val last = differences.fold(0) { acc, l ->
             if (l == 1L) acc + 1
             else {
-                yield(acc)
+                if (acc > 0) yield(acc)
                 0
             }
         }
-        yield(last)
-    }.filter { it > 0 }.toList()
+        if (last > 0) yield(last)
+    }.toList()
 
 fun groupRanges(rangeLengths: List<Int>): Map<Int, Int> =
     rangeLengths.groupBy(keySelector = {it}, valueTransform = {it})
