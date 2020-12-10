@@ -107,7 +107,7 @@ fun calculateTotalPossibleCombinations(countedRanges: Map<Int, Int>): Long =
             3 -> 4L
             4 -> 7L
             else -> throw IllegalArgumentException("Don't know number of combinations for range length $rangeLength")
-        }.toDouble().pow(count).toLong()
+        }.pow(count)
     }.reduce{acc, value -> acc * value}
 
 fun calculatePossibleCombinationsFromFile(fileName: String): Long =
@@ -115,3 +115,12 @@ fun calculatePossibleCombinationsFromFile(fileName: String): Long =
         findConsecutiveRangesOf1s(calculateDifferences(readAllJoltages(fileName)))
     ))
 
+fun Long.pow(power: Int): Long {
+    tailrec fun powR(base: Long, r: Long, power: Int): Long =
+    when  {
+        power == 0 -> r
+        power and 1 == 1 -> powR(base, r * base, power-1)
+        else -> powR(base * base, r, power shr 1)
+    }
+    return powR(this, 1, power)
+}

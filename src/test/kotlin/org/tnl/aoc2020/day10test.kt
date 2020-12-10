@@ -208,4 +208,20 @@ class Day10Test {
         // Assert
         assertEquals(expected, result)
     }
+
+    @ParameterizedTest
+    @CsvSource(
+        "7, 2, 49",
+        "2, 3, 8",
+        "2, 10, 1024",
+        "3, 0, 1",
+        "4, 1, 4"
+    )
+    fun testPow(base: Long, power: Int, expected: Long) {
+        // Act
+        val result = base.pow(power)
+
+        // Assert
+        assertEquals(expected, result)
+    }
 }
