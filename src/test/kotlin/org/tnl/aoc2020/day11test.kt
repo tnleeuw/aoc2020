@@ -37,10 +37,10 @@ class Day11Test {
     @ParameterizedTest
     @CsvSource(
         "0,0,OCCUPIED",
-        "-1,0,FLOOR",
-        "0,-1,FLOOR",
-        "11,1,FLOOR",
-        "1,11,FLOOR",
+        "-1,0,EMPTY",
+        "0,-1,EMPTY",
+        "11,1,EMPTY",
+        "1,11,EMPTY",
         "0,1,FLOOR",
         "1,1,EMPTY"
     )
@@ -66,7 +66,7 @@ class Day11Test {
         val grid = readGrid("day11-test6.txt")
 
         // Act
-        val result = grid.countFreeSurroundingSeats(row, col)
+        val result = grid.countFreeSurroundingSeats(row, col, false)
 
         // Assert
         assertEquals(expected, result)
@@ -83,7 +83,7 @@ class Day11Test {
         val grid = readGrid("day11-test6.txt")
 
         // Act
-        val result = grid.countOccupiedSurroundingSeats(row, col)
+        val result = grid.countOccupiedSurroundingSeats(row, col, false)
 
         // Assert
         assertEquals(expected, result)
@@ -102,7 +102,7 @@ class Day11Test {
         val grid = readGrid(fileName)
 
         // Act
-        val result = grid.newSeatState(row, col)
+        val result = grid.newSeatState(row, col, false, 4)
 
         // Assert
         assertEquals(expected, result)
@@ -155,7 +155,7 @@ class Day11Test {
         val expected = readGrid(expectedFileName)
 
         // Act
-        val result = grid.nextGridState()
+        val result = grid.nextGridState(false, 4)
 
         // Assert
         assertEquals(expected, result)
@@ -172,7 +172,7 @@ class Day11Test {
         val expected = readGrid(expectedFileName)
 
         // Act
-        val result = findStableState(grid)
+        val result = findStableState(grid, false, 4)
 
         // Assert
         assertEquals(expected, result)
@@ -180,11 +180,21 @@ class Day11Test {
         assertEquals(expectedOccupiedSeats, result.countOccupiedSeats())
     }
 
-    fun testFindAnswer() {
+    @Test
+    fun testFindAnswerPuzzle1() {
         // Act
         val answer = Day11Puzzle1.findAnswer("day11-test.txt")
 
         // Assert
         assertEquals(37, answer)
+    }
+
+    @Test
+    fun testFindAnswerPuzzle2() {
+        // Act
+        val answer = Day11Puzzle2.findAnswer("day11-test.txt")
+
+        // Assert
+        assertEquals(26, answer)
     }
 }
