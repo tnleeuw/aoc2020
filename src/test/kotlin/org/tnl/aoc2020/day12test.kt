@@ -33,7 +33,7 @@ class Day12Test {
     )
     fun testNrOfMoves(moves: String, expected: Long) {
         // Act
-        val result = moves.nrOfMoves()
+        val result = moves.toNrOfMoves()
 
         // Assert
         assertEquals(expected, result)
@@ -82,7 +82,7 @@ class Day12Test {
     @Test
     fun testRunMoves() {
         // Act
-        val result = Ship(Direction.E, 0L, 0L).runMoves("day12-test.txt")
+        val result = Day12Puzzle1.startingPoint().runMoves("day12-test.txt")
 
         // Assert
         assertEquals(Direction.S, result.facing)
@@ -93,9 +93,74 @@ class Day12Test {
     @Test
     fun testSumManhattanDistAfterAllMoves() {
         // Act
-        val result = Ship(Direction.E, 0L, 0L).sumManhattanDistAfterAllMoves("day12-test.txt")
+        val result = Day12Puzzle1.startingPoint().sumManhattanDistAfterAllMoves("day12-test.txt")
 
         // Assert
         assertEquals(25, result)
+    }
+
+    @Test
+    fun testMoveByWayPoint() {
+        // Arrange
+        val ship = Day12Puzzle2.startingPoint()
+
+        // Act
+        val result = ship.moveByWayPoint("F10")
+
+        // Assert
+        assertEquals(100L, result.ewPos)
+        assertEquals(10, result.nsPos)
+    }
+
+    @ParameterizedTest
+    @CsvSource(
+        "10, 1, N3, 10, 4",
+        "10, 1, S3, 10, -2",
+        "10, 1, E5, 15, 1",
+        "10, 1, W5, 5, 1"
+    )
+    fun testMoveWayPoint(ew: Long, ns: Long, moveBy: String, expectedEW: Long, expectedNS: Long) {
+        // Arrange
+        val wayPoint = WayPoint(ew, ns)
+
+        // Act
+        val result = wayPoint.move(moveBy)
+
+        // Assert
+        assertEquals(expectedEW, result.ew)
+        assertEquals(expectedNS, result.ns)
+    }
+
+    @ParameterizedTest
+    @CsvSource(
+        "10, 4, R90, 4, -10",
+        "10, 4, R180, -10, -4",
+        "10, 4, R270, -4, 10",
+        "10, 4, R360, 10, 4",
+        "10, 4, L90, -4, 10",
+        "10, 4, L180, -10, -4",
+        "10, 4, L270, 4, -10",
+        "10, 4, L360, 10, 4",
+    )
+    fun testTurnWayPoint(ew: Long, ns: Long, turnBy: String, expectedEW: Long, expectedNS: Long) {
+        // Arrange
+        val wayPoint = WayPoint(ew, ns)
+
+        // Act
+        val result = wayPoint.turn(turnBy)
+
+        // Assert
+        assertEquals(expectedEW, result.ew)
+        assertEquals(expectedNS, result.ns)
+
+    }
+
+    @Test
+    fun testSumManhattanDistAfterAllMovesWithWayPoint() {
+        // Act
+        val result = Day12Puzzle2.startingPoint().sumManhattanDistAfterAllMovesWithWayPoint("day12-test.txt")
+
+        // Assert
+        assertEquals(286, result)
     }
 }
