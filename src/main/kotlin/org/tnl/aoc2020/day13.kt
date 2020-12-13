@@ -29,8 +29,7 @@ object Day13Puzzle2 {
 
     fun calculateAnswer(fileName: String, startingAt: BigInteger): BigInteger {
         val buses = readInputsPuzzle2(fileName)
-        val maxBus = buses.busWithLargestId()
-        return puzzle2BruteForcing(firstCandidateAfter(startingAt, maxBus), maxBus, buses)
+        return puzzle2Lcm(buses.entries.toList())
     }
 }
 
@@ -71,23 +70,16 @@ fun parseBusIdsWithIndex(line: String): Map<Int, BigInteger> =
         .map { (index, s) -> Pair(index, BigInteger.valueOf(s.toLong())) }
         .associate { it }
 
-fun isGoldenTimestamp(timestamp: BigInteger, buses: Map<Int, BigInteger>): Boolean =
-    buses.all { (index, busId)  -> (timestamp + BigInteger.valueOf(index.toLong())) % busId == BigInteger.ZERO}
 
-tailrec fun puzzle2BruteForcing(testValue: BigInteger, steppingWithBus: Map.Entry<BigInteger, BigInteger>, buses: Map<Int, BigInteger>): BigInteger =
-    if (isGoldenTimestamp(testValue.testValueToTimestamp(steppingWithBus), buses)) testValue.testValueToTimestamp(steppingWithBus)
-    else puzzle2BruteForcing(testValue + steppingWithBus.value, steppingWithBus, buses)
+fun puzzle2Lcm(buses: List<Map.Entry<Int, BigInteger>>): BigInteger {
+    tailrec fun findLcm(lcm: BigInteger, increment: BigInteger, busIndex: BigInteger, busId: BigInteger): BigInteger =
+        if ((lcm + busIndex) % busId == BigInteger.ZERO) lcm
+        else findLcm(lcm + increment, increment,busIndex, busId)
 
-fun firstCandidateAfter(timestamp: BigInteger, bus: Map.Entry<BigInteger, BigInteger>): BigInteger =
-    ((timestamp / bus.value) + BigInteger.ONE) * bus.value
+    tailrec fun find(lcm: BigInteger, increment: BigInteger, buses: List<Map.Entry<Int, BigInteger>>):  BigInteger =
+        if (buses.isEmpty()) lcm
+        else find(findLcm(lcm, increment, buses[0].key.toBigInteger(), buses[0].value),
+                  increment * buses[0].value, buses.subList(1, buses.size))
 
-fun BigInteger.testValueToTimestamp(withBus: Map.Entry<BigInteger, BigInteger>): BigInteger =
-    this - withBus.key
-
-fun Map<Int, BigInteger>.busWithLargestId(): Map.Entry<BigInteger, BigInteger> = maxByOrNull { it.value }!!.withBigIntKey()
-
-fun Map.Entry<Int, BigInteger>.withBigIntKey() =
-    BusEntry(key.toBigInteger(), value)
-
-class BusEntry(override val key: BigInteger,
-               override val value: BigInteger): Map.Entry<BigInteger, BigInteger>
+    return find(BigInteger.ZERO, buses[0].value, buses.subList(1, buses.size))
+}

@@ -1,15 +1,13 @@
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.CsvSource
-import org.tnl.aoc2020.BusEntry
 import org.tnl.aoc2020.Day13Puzzle1
 import org.tnl.aoc2020.Day13Puzzle2
 import org.tnl.aoc2020.calculateWaitingAllTimes
 import org.tnl.aoc2020.calculateWaitingTime
 import org.tnl.aoc2020.findShortestWait
-import org.tnl.aoc2020.isGoldenTimestamp
 import org.tnl.aoc2020.parseBusIds
 import org.tnl.aoc2020.parseBusIdsWithIndex
-import org.tnl.aoc2020.puzzle2BruteForcing
+import org.tnl.aoc2020.puzzle2Lcm
 import org.tnl.aoc2020.readInputs
 import org.tnl.aoc2020.readInputsPuzzle2
 import java.math.BigInteger
@@ -120,25 +118,6 @@ class Day13Test {
 
     @ParameterizedTest
     @CsvSource(
-        "1068781, true",
-        "1068788, false",
-        "10681, false",
-        "1068782, false",
-        "1068780, false",
-    )
-    fun testIsGoldenTimestamp(timestamp: Long, expected: Boolean) {
-        // Arrange
-        val buses = parseBusIdsWithIndex("7,13,x,x,59,x,31,19")
-
-        // Act
-        val result = isGoldenTimestamp(BigInteger.valueOf(timestamp), buses)
-
-        // Assert
-        assertEquals(expected, result)
-    }
-
-    @ParameterizedTest
-    @CsvSource(
         "7,13,x,x,59,x,31,19|1068781",
         "17,x,13,19|3417",
         "67,7,59,61|754018",
@@ -147,13 +126,12 @@ class Day13Test {
         "1789,37,47,1889|1202161486",
         delimiter = '|'
     )
-    fun testBruteForce(inputs: String, expected: Long) {
+    fun testLcmAlgo(inputs: String, expected: Long) {
         // Arrange
         val buses = parseBusIdsWithIndex(inputs)
-        val steppingWithBus = BusEntry(BigInteger.ZERO, buses[0]!!)
 
         // Act
-        val result = puzzle2BruteForcing(BigInteger.ZERO, steppingWithBus, buses)
+        val result = puzzle2Lcm(buses.entries.toList())
 
         // Assert
         assertEquals(BigInteger.valueOf(expected), result)
