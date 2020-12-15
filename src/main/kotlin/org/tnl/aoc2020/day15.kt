@@ -10,6 +10,14 @@ object Day15Puzzle1 {
     }
 }
 
+object Day15Puzzle2 {
+    @JvmStatic
+    fun main(args: Array<String>) {
+        val answer = playGame(readNumbersFromFile("day15-data.txt"), 30000000)
+        println("Puzzle 1 answer: $answer")
+    }
+}
+
 typealias MemoryGameState=MutableMap<Int, Pair<Int, Int>>
 
 fun lineToNumbers(line: String): List<Int> =
