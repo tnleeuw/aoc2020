@@ -6,11 +6,34 @@ import java.lang.IllegalArgumentException
 object Day16Puzzle1 {
     @JvmStatic
     fun main(args: Array<String>) {
-        val (ticketRules, ownTicket, nearbyTickets) = parseInputData("day16-data.txt")
+        val (ticketRules, _, nearbyTickets) = parseInputData("day16-data.txt")
         val result = calculateTicketScanningErrorRate(ticketRules, nearbyTickets)
         println("And the answer is: $result")
     }
 }
+
+object Day16Puzzle2 {
+    @JvmStatic
+    fun main(args: Array<String>) {
+        val result = puzzle2Answer()
+        println("And the answer is: $result")
+    }
+
+    fun puzzle2Answer(): Long {
+        val (ticketRules, ownTicket, nearbyTickets) = parseInputData("day16-data.txt")
+
+        val validatedTickets = discardInvalidTickets(ticketRules, nearbyTickets)
+        val fieldPositions = mapFieldsToPosition(ticketRules, validatedTickets)
+
+        return fieldPositions
+            .filterKeys { key -> key.startsWith("departure") }
+            .values
+            .map { pos -> ownTicket[pos].toLong() }
+            .reduce(Long::times)
+    }
+}
+
+
 typealias TicketRules=Map<String, List<IntRange>>
 typealias Ticket=List<Int>
 
@@ -89,3 +112,29 @@ fun TicketRules.allTicketFieldRanges(): List<IntRange> =
 
 fun calculateTicketScanningErrorRate(ticketRules: TicketRules, tickets: List<Ticket>): Int =
     findAllTicketValuesInError(ticketRules, tickets).sum()
+
+fun discardInvalidTickets(ticketRules: TicketRules, tickets: List<Ticket>): List<Ticket> {
+    val allTicketRanges = ticketRules.allTicketFieldRanges()
+
+    return tickets.filter { ticket ->
+        ticket.all { fv -> allTicketRanges.any { r-> fv in r } }
+    }
+}
+
+fun mapFieldsToPosition(ticketRules: TicketRules, tickets: List<Ticket>): Map<String, Int> =
+    ticketRules.mapValues { (_, rules) ->
+        (0 until ticketRules.size).find { pos ->
+            isRuleMatchingAllTicketsAtPos(rules, tickets, pos)
+        }!!
+    }
+
+fun isRuleMatchingAllTicketsAtPos(
+    rules: List<IntRange>,
+    tickets: List<Ticket>,
+    pos: Int
+) = tickets.slice(pos).all { tv -> rules.any { r -> tv in r } }
+
+fun List<Ticket>.slice(pos: Int): List<Int> =
+    map { it[pos] }
+
+

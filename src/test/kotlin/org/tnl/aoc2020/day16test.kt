@@ -2,6 +2,7 @@ package org.tnl.aoc2020
 
 import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertTrue
 
 class Day16Test {
 
@@ -33,7 +34,7 @@ class Day16Test {
     @Test
     fun testParseInputFile() {
         // Act
-        val (ticketRules, ownTicket, nearbyTickets) = parseInputData("day16-test.txt")
+        val (ticketRules, ownTicket, nearbyTickets) = parseInputData("day16-test1.txt")
 
         // Assert
         assertEquals(3, ticketRules.size)
@@ -44,7 +45,7 @@ class Day16Test {
     @Test
     fun testFindAllTicketValuesInError() {
         // Arrange
-        val (ticketRules, ownTicket, nearbyTickets) = parseInputData("day16-test.txt")
+        val (ticketRules, _, nearbyTickets) = parseInputData("day16-test1.txt")
 
         // Act
         val result = findAllTicketValuesInError(ticketRules, nearbyTickets)
@@ -56,12 +57,68 @@ class Day16Test {
     @Test
     fun testTicketErrorScanningRate() {
         // Arrange
-        val (ticketRules, ownTicket, nearbyTickets) = parseInputData("day16-test.txt")
+        val (ticketRules, _, nearbyTickets) = parseInputData("day16-test1.txt")
 
         // Act
         val result = calculateTicketScanningErrorRate(ticketRules, nearbyTickets)
 
         // Assert
         assertEquals(71, result)
+    }
+
+    @Test
+    fun testDiscardInvalidTickets() {
+        // Arrange
+        val (ticketRules, _, nearbyTickets) = parseInputData("day16-test1.txt")
+
+        // Act
+        val result = discardInvalidTickets(ticketRules, nearbyTickets)
+
+        // Assert
+        assertEquals(1, result.size)
+        val ticket1 = result[0]
+        assertEquals(listOf(7, 3, 47), ticket1)
+    }
+
+    @Test
+    fun testTicketSlice() {
+        // Arrange
+        val (_, _, nearbyTickets) = parseInputData("day16-test2.txt")
+
+        // Act
+        val result = nearbyTickets.slice(0)
+
+        // Arrange
+        assertEquals(listOf(3,15,5), result)
+    }
+
+    @Test
+    fun testIsRuleMatchingAllTicketsAtPos() {
+        // Arrange
+        val (ticketRules, _, nearbyTickets) = parseInputData("day16-test2.txt")
+
+        // Act
+        val result = isRuleMatchingAllTicketsAtPos(ticketRules["class"]!!, nearbyTickets, 1)
+
+        // Assert
+        assertTrue(result)
+    }
+
+    @Test
+    fun testMapFieldsToPosition() {
+        // Arrange
+        val (ticketRules, ownTicket, nearbyTickets) = parseInputData("day16-test2.txt")
+
+        // Act
+        val result = mapFieldsToPosition(ticketRules, nearbyTickets)
+
+        // Assert
+        assertEquals(0, result["row"])
+        assertEquals(1, result["class"])
+        assertEquals(2, result["seat"])
+
+        assertEquals(12, ownTicket[result["class"]!!])
+        assertEquals(11, ownTicket[result["row"]!!])
+        assertEquals(13, ownTicket[result["seat"]!!])
     }
 }
