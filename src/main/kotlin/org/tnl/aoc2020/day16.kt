@@ -1,6 +1,7 @@
 package org.tnl.aoc2020
 
 import java.lang.IllegalArgumentException
+import kotlin.math.sin
 
 
 object Day16Puzzle1 {
@@ -32,7 +33,6 @@ object Day16Puzzle2 {
             .reduce(Long::times)
     }
 }
-
 
 typealias TicketRules=Map<String, List<IntRange>>
 typealias Ticket=List<Int>
@@ -122,11 +122,40 @@ fun discardInvalidTickets(ticketRules: TicketRules, tickets: List<Ticket>): List
 }
 
 fun mapFieldsToPosition(ticketRules: TicketRules, tickets: List<Ticket>): Map<String, Int> =
+    resolveCandidates(
+        findAllCandidatePositions(ticketRules, tickets)
+    ).first
+
+fun findAllCandidatePositions(ticketRules: TicketRules, tickets: List<Ticket>): Map<String, List<Int>> =
     ticketRules.mapValues { (_, rules) ->
-        (0 until ticketRules.size).find { pos ->
+        (0 until ticketRules.size).filter { pos ->
             isRuleMatchingAllTicketsAtPos(rules, tickets, pos)
-        }!!
+        }
     }
+
+fun findFieldsWithSingleCandidate(candidates: Map<String, List<Int>>): Map<String, Int> =
+    candidates.filterValues { it.size == 1 }.mapValues { it.value[0] }
+
+fun remainingCandidates(candidates: Map<String, List<Int>>, toRemove: List<Int>): Map<String, List<Int>> =
+    candidates.mapValues { (_, candidates) -> candidates - toRemove }
+
+fun resolveCandidates(candidates: Map<String, List<Int>>): Pair<Map<String, Int>, Map<String, List<Int>>> {
+    tailrec fun filter(foundSoFar: Map<String, Int>,
+                       remainingCandidates: Map<String, List<Int>>): Pair<Map<String, Int>, Map<String, List<Int>>> {
+
+        val singleCandidates: Map<String, Int> = findFieldsWithSingleCandidate(remainingCandidates)
+        return if (singleCandidates.isEmpty()) {
+            Pair(foundSoFar, remainingCandidates)
+        } else {
+            filter(
+                foundSoFar + singleCandidates,
+                remainingCandidates(remainingCandidates, singleCandidates.values.toList())
+            )
+        }
+    }
+
+    return filter(mapOf(), candidates)
+}
 
 fun isRuleMatchingAllTicketsAtPos(
     rules: List<IntRange>,

@@ -121,4 +121,50 @@ class Day16Test {
         assertEquals(11, ownTicket[result["row"]!!])
         assertEquals(13, ownTicket[result["seat"]!!])
     }
+
+    @Test
+    fun testMapFieldsToPositionInFullFile() {
+        // Arrange
+        val (ticketRules, _, nearbyTickets) = parseInputData("day16-data.txt")
+        val validatedTickets = discardInvalidTickets(ticketRules, nearbyTickets)
+
+        // Act
+        val result = mapFieldsToPosition(ticketRules, validatedTickets)
+
+        // Assert
+        assertEquals(result.size, result.values.toSet().size)
+    }
+
+    @Test
+    fun testFindAllCandidatePositions() {
+        // Arrange
+        val (ticketRules, _, nearbyTickets) = parseInputData("day16-data.txt")
+        val validatedTickets = discardInvalidTickets(ticketRules, nearbyTickets)
+
+        // Act
+        val result = findAllCandidatePositions(ticketRules, validatedTickets)
+
+        println(result)
+        // Assert
+        assertEquals(result.size, result.values.toSet().size)
+    }
+
+    @Test
+    fun testResolveCandidates() {
+        // Arrange
+        val (ticketRules, _, nearbyTickets) = parseInputData("day16-data.txt")
+        val validatedTickets = discardInvalidTickets(ticketRules, nearbyTickets)
+        val candidates = findAllCandidatePositions(ticketRules, validatedTickets)
+
+        // Act
+        val result = resolveCandidates(candidates)
+
+        println(result)
+
+        // Assert
+        val (found, remaining) = result
+        assertEquals(20, found.size)
+        assertEquals(0, remaining.values.sumBy { it.size })
+        assertEquals(20, found.values.toSet().size)
+    }
 }
