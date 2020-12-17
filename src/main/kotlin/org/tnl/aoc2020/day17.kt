@@ -23,10 +23,10 @@ object Day17Puzzle2 {
     }
 }
 
-typealias Coord=List<Int>
-fun Coord.allNeighbours(): Sequence<Coord> {
+typealias Point=List<Int>
+fun Point.allNeighbours(): Sequence<Point> {
 
-    fun generateOffsetsOverDimensions(workingState: Coord, nrDimensions: Int): Sequence<Coord> {
+    fun generateOffsetsOverDimensions(workingState: Point, nrDimensions: Int): Sequence<Point> {
         return sequence {
             if (nrDimensions == 0) {
                 if (!workingState.all { it == 0 }) {
@@ -43,13 +43,13 @@ fun Coord.allNeighbours(): Sequence<Coord> {
         .map { offset -> offset.mapIndexed { dim, dimOffset -> get(dim) + dimOffset } }
 }
 
-fun Set<Coord>.minOverDim(dimension: Int): Int = minOf { it[dimension] }
-fun Set<Coord>.maxOverDim(dimension: Int): Int = maxOf { it[dimension] }
-fun Set<Coord>.nrOfDimensions(): Int = first().size
+fun Set<Point>.minOverDim(dimension: Int): Int = minOf { it[dimension] }
+fun Set<Point>.maxOverDim(dimension: Int): Int = maxOf { it[dimension] }
+fun Set<Point>.nrOfDimensions(): Int = first().size
 
-fun Set<Coord>.fullGridWithEdges(): Sequence<Coord> {
+fun Set<Point>.fullGridWithEdges(): Sequence<Point> {
 
-    fun generateOverDimensions(workingState: Coord, remainingDimensions: Int): Sequence<Coord> {
+    fun generateOverDimensions(workingState: Point, remainingDimensions: Int): Sequence<Point> {
         return sequence {
             if (remainingDimensions <= 0) {
                 yield(workingState)
@@ -65,7 +65,7 @@ fun Set<Coord>.fullGridWithEdges(): Sequence<Coord> {
     return generateOverDimensions(listOf(), nrOfDimensions())
 }
 
-fun readInputState(fileName: String, nrDimensions: Int): Set<Coord> =
+fun readInputState(fileName: String, nrDimensions: Int): Set<Point> =
     sequence {
         val remainingDims = (0 until nrDimensions-2).map { 0 }
         getDataInputStream(fileName).bufferedReader()
@@ -78,18 +78,18 @@ fun readInputState(fileName: String, nrDimensions: Int): Set<Coord> =
             }
     }.toSet()
 
-fun Set<Coord>.countNeighbours(coord: Coord): Int =
-    coord.allNeighbours()
+fun Set<Point>.countNeighbours(point: Point): Int =
+    point.allNeighbours()
         .count { contains(it) }
 
-fun Set<Coord>.canLiveInNextGeneration(coord: Coord): Boolean =
-    when(countNeighbours(coord)) {
+fun Set<Point>.canLiveInNextGeneration(point: Point): Boolean =
+    when(countNeighbours(point)) {
         3 -> true
-        2 -> contains(coord)
+        2 -> contains(point)
         else -> false
     }
 
-fun Set<Coord>.nextGeneration(): Set<Coord> =
+fun Set<Point>.nextGeneration(): Set<Point> =
     sequence {
         fullGridWithEdges().forEach { mcoord ->
             if (canLiveInNextGeneration(mcoord)) yield(mcoord)
@@ -97,6 +97,6 @@ fun Set<Coord>.nextGeneration(): Set<Coord> =
         }
     }.toSet()
 
-tailrec fun runLife(state: Set<Coord>, nrOfGenerations: Int): Set<Coord> =
+tailrec fun runLife(state: Set<Point>, nrOfGenerations: Int): Set<Point> =
     if (state.isEmpty() || nrOfGenerations == 0) state
     else runLife(state.nextGeneration(), nrOfGenerations - 1)
