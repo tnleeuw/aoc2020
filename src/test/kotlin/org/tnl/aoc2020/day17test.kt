@@ -10,50 +10,125 @@ import kotlin.test.assertTrue
 internal class Day17Test {
 
     @Test
-    fun testReadInputState() {
+    fun testReadInputState3D() {
         // Act
-        val state = readInputState("day17-test.txt")
+        val state = readInputState("day17-test.txt", 3)
 
         // Assert
         assertEquals(5, state.size)
-        assertTrue(state.contains(Coord(1, 0, 0)))
-        assertTrue(state.contains(Coord(2, 1, 0)))
-        assertTrue(state.contains(Coord(0, 2, 0)))
-        assertTrue(state.contains(Coord(1, 2, 0)))
-        assertTrue(state.contains(Coord(2, 2, 0)))
+        assertTrue(state.contains(listOf(1, 0, 0)))
+        assertTrue(state.contains(listOf(2, 1, 0)))
+        assertTrue(state.contains(listOf(0, 2, 0)))
+        assertTrue(state.contains(listOf(1, 2, 0)))
+        assertTrue(state.contains(listOf(2, 2, 0)))
     }
 
     @Test
-    fun testMinMax() {
-        // Arrange
-        val state = readInputState("day17-test.txt")
+    fun testReadInputState4D() {
+        // Act
+        val state = readInputState("day17-test.txt", 4)
 
-        // Act / Assert
-        assertEquals(0, state.minX())
-        assertEquals(2, state.maxX())
-        assertEquals(0, state.minY())
-        assertEquals(2, state.maxY())
-        assertEquals(0, state.minZ())
-        assertEquals(0, state.maxZ())
+        // Assert
+        assertEquals(5, state.size)
+        assertTrue(state.contains(listOf(1, 0, 0, 0)))
+        assertTrue(state.contains(listOf(2, 1, 0, 0)))
+        assertTrue(state.contains(listOf(0, 2, 0, 0)))
+        assertTrue(state.contains(listOf(1, 2, 0, 0)))
+        assertTrue(state.contains(listOf(2, 2, 0, 0)))
     }
 
     @Test
-    fun testGetSurroundingCoordinates() {
+    fun testAllNeighbours3D() {
         // Arrange
-        val coord = Coord(0, 0, 0)
+        val coord = listOf(0, 0, 0)
 
         // Act
-        val neighbours = coord.getSurroundingCoordinates().toSet()
+        val neighbours = coord.allNeighbours().toSet()
 
         // Assert
         assertEquals(26, neighbours.size)
         assertFalse(coord in neighbours)
-        assertTrue(Coord(-1, -1, -1) in neighbours)
-        assertTrue(Coord(1, 1, 1) in neighbours)
-        assertTrue(Coord(0, 1, 1) in neighbours)
-        assertTrue(Coord(0, 1, 0) in neighbours)
-        assertTrue(Coord(0, 1, -1) in neighbours)
-        assertTrue(Coord(0, 0, -1) in neighbours)
+        assertTrue(listOf(-1, -1, -1) in neighbours)
+        assertTrue(listOf(1, 1, 1) in neighbours)
+        assertTrue(listOf(0, 1, 1) in neighbours)
+        assertTrue(listOf(0, 1, 0) in neighbours)
+        assertTrue(listOf(0, 1, -1) in neighbours)
+        assertTrue(listOf(0, 0, -1) in neighbours)
+    }
+
+    @Test
+    fun testAllNeighbours4D() {
+        // Arrange
+        val coord = listOf(0, 0, 0, 0)
+
+        // Act
+        val neighbours = coord.allNeighbours().toSet()
+
+        // Assert
+        assertEquals(80, neighbours.size)
+        assertFalse(coord in neighbours)
+        assertTrue(listOf(-1, -1, -1, -1) in neighbours)
+        assertTrue(listOf(1, 1, 1, 1) in neighbours)
+        assertTrue(listOf(0, 1, 1, 0) in neighbours)
+        assertTrue(listOf(0, 1, 0, 1) in neighbours)
+        assertTrue(listOf(0, 1, -1, -1) in neighbours)
+        assertTrue(listOf(0, 0, -1, -1) in neighbours)
+    }
+
+    @Test
+    fun testFullGridWithEdges2D() {
+        // Arrange
+        val grid = setOf(listOf(0, 0))
+
+        // Act
+        val result = grid.fullGridWithEdges().toSet()
+
+        // Arrange
+        assertEquals(9, result.size)
+        assertTrue(listOf(-1, -1) in result)
+        assertTrue(listOf(1, 1) in result)
+        assertTrue(listOf(0, 1) in result)
+        assertTrue(listOf(0, -1) in result)
+        assertTrue(listOf(0, 0) in result)
+    }
+
+    @Test
+    fun testFullGridWithEdges3D() {
+        // Arrange
+        val grid = setOf(listOf(0, 0, 0))
+
+        // Act
+        val result = grid.fullGridWithEdges().toSet()
+
+        // Arrange
+        assertEquals(27, result.size)
+        assertTrue(listOf(-1, -1, -1) in result)
+        assertTrue(listOf(1, 1, 1) in result)
+        assertTrue(listOf(0, 1, 1) in result)
+        assertTrue(listOf(0, 1, 0) in result)
+        assertTrue(listOf(0, 1, -1) in result)
+        assertTrue(listOf(0, 0, -1) in result)
+        assertTrue(listOf(0, 0, 0) in result)
+    }
+
+
+    @Test
+    fun testFullGridWithEdges4D() {
+        // Arrange
+        val grid = setOf(listOf(0, 0, 0, 0))
+
+        // Act
+        val result = grid.fullGridWithEdges().toSet()
+
+        // Arrange
+        assertEquals(81, result.size)
+        assertTrue(listOf(-1, -1, -1, -1) in result)
+        assertTrue(listOf(1, 1, 1, 1) in result)
+        assertTrue(listOf(0, 1, 1, 0) in result)
+        assertTrue(listOf(0, 1, 0, -1) in result)
+        assertTrue(listOf(0, 1, -1, 1) in result)
+        assertTrue(listOf(0, 0, -1, -1) in result)
+        assertTrue(listOf(0, 0, 0, 0) in result)
     }
 
     @ParameterizedTest
@@ -69,8 +144,8 @@ internal class Day17Test {
     )
     fun testCountNeighbours(x: Int, y: Int, z: Int, expected: Int) {
         // Arrange
-        val state = readInputState("day17-test.txt")
-        val coord = Coord(x, y, z)
+        val state = readInputState("day17-test.txt", 3)
+        val coord = listOf(x, y, z)
 
         // Act
         val result = state.countNeighbours(coord)
@@ -92,8 +167,8 @@ internal class Day17Test {
     )
     fun testCanLive(x: Int, y: Int, z: Int, expected: Boolean) {
         // Arrange
-        val state = readInputState("day17-test.txt")
-        val coord = Coord(x, y, z)
+        val state = readInputState("day17-test.txt", 3)
+        val coord = listOf(x, y, z)
 
         // Act
         val result = state.canLiveInNextGeneration(coord)
@@ -103,9 +178,9 @@ internal class Day17Test {
     }
 
     @Test
-    fun testNextGeneration() {
+    fun testNextGeneration3D() {
         // Arrange
-        val state = readInputState("day17-test.txt")
+        val state = readInputState("day17-test.txt", 3)
 
         // Act
         val result = state.nextGeneration()
@@ -115,14 +190,38 @@ internal class Day17Test {
     }
 
     @Test
-    fun testRunLife() {
+    fun testRunLife3D() {
         // Arrange
-        val state = readInputState("day17-test.txt")
+        val state = readInputState("day17-test.txt", 3)
 
         // Act
         val result = runLife(state, 6)
 
         // Assert
         assertEquals(112, result.size)
+    }
+
+    @Test
+    fun testNextGeneration4D() {
+        // Arrange
+        val state = readInputState("day17-test.txt", 4)
+
+        // Act
+        val result = state.nextGeneration()
+
+        // Assert
+        assertEquals(29, result.size)
+    }
+
+    @Test
+    fun testRunLife4D() {
+        // Arrange
+        val state = readInputState("day17-test.txt", 4)
+
+        // Act
+        val result = runLife(state, 6)
+
+        // Assert
+        assertEquals(848, result.size)
     }
 }
