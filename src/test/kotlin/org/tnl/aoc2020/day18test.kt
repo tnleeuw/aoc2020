@@ -1,6 +1,7 @@
 package org.tnl.aoc2020
 
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.CsvSource
 
@@ -31,5 +32,14 @@ class Day18Test {
 
         // Assert
         assertEquals(expected, result)
+    }
+
+    @Test
+    fun testSumAllAnswers() {
+        // Act
+        val total = sumOfAllAnswers("day18-test.txt")
+
+        // Assert
+        assertEquals(26457L, total)
     }
 }
